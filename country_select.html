@@ -1,0 +1,6 @@
+{% load actionkit_tags %}
+<select name="{{ input_name_prefix }}country" id="{{ input_name_prefix }}country" {% if onchange %}onchange="{{ onchange }}" onblur="{{ onchange }}"{% endif %}>
+{% for std_name,name in page.lang_or_en.country_names_us_first %}
+<option value="{{ std_name|escapeall }}">{{ name|escapeall }}</option>
+{% endfor %}
+</select>

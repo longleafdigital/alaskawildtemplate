@@ -1,0 +1,486 @@
+{% load actionkit_tags %}
+<!DOCTYPE html>
+<!-- Foundation Template -->
+<!-- @START wrapper.html -->
+<html class="no-js ak-no-js" lang="{{page.lang.iso_code|default:"en"}}"{% if page.lang.is_rtl %} dir="rtl"{% endif %}>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge;chrome=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+	<title>
+		{% block title %}
+			{{ page.title }} | {% filter ak_text:"org_name" %}{% client_name %}{% endfilter %}
+		{% endblock %}
+	</title>
+
+	<link rel="shortcut icon" href="https://s3.amazonaws.com/s3.alaskawild.org/images/favicon.ico" />
+
+	<script>startTime=new Date()</script>
+
+	<!-- Hotjar Tracking Code for act.alaskawild.org -->
+	<script>
+		(function(h,o,t,j,a,r){
+			h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
+			h._hjSettings={hjid:570183,hjsv:5};
+			a=o.getElementsByTagName('head')[0];
+			r=o.createElement('script');r.async=1;
+			r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
+			a.appendChild(r);
+		})(window,document,'//static.hotjar.com/c/hotjar-','.js?sv=');
+	</script>
+	
+<!-- Facebook Pixel Code -->
+
+<script>
+!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+document,'script','//connect.facebook.net/en_US/fbevents.js');
+
+fbq('init', '172698786404627');
+fbq('track', "PageView");
+
+
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=172698786404627&ev=PageView&noscript=1"
+/></noscript>
+
+<!-- End Facebook Pixel Code -->
+
+
+
+
+{% comment %}
+	/*
+-------------------------------------------------------------------------------
+	@START - Facebook Meta Data	
+-------------------------------------------------------------------------------
+	*/
+{% endcomment %}
+
+	<!-- AK Sharing -->
+	{{ page.followup.share_title_tag }}
+
+	{% if form.id %}<meta name="description" property="og:description" content="{% block description %}{{ page.followup.share_description_value }}{% endblock %}">{% endif %}
+
+	{{ page.followup.share_image_tag }}
+
+	{{ page.followup.share_url_tag }}
+	<!-- AK Sharing -->
+
+{% comment %}
+	/*
+-------------------------------------------------------------------------------
+	@END - Facebook Meta Data	
+-------------------------------------------------------------------------------
+	*/
+{% endcomment %}
+
+	{% block meta_additions %}{% endblock %}
+
+	{% block css_additions %}{% endblock %}
+
+	{% load_ak_context context %}
+
+	<!-- jQuery from Google CDN -->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+	
+	<!-- jQuery UI CDN -->
+	<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.js" integrity="sha256-DI6NdAhhFRnO2k51mumYeDShet3I8AKCQf/tf7ARNhI=" crossorigin="anonymous"></script>    
+
+	<!-- Mondernizr -->
+	<script src="https://s3.amazonaws.com/s3.alaskawild.org/foundation/js/modernizr.js"></script>
+
+	<!-- Jquery Expander Plugin -->
+	<script src="https://s3.amazonaws.com/s3.alaskawild.org/foundation/js/jquery.expander.min.js"></script>
+
+	{% load_js %}
+		/resources/actionkit.js
+	{% end %}
+
+	<!-- Share Progress -->
+	<script src="//c.shpg.org/44/sp.js"></script>
+
+	<!-- jQuery Cookie Plugin -->
+	<script src="https://s3.amazonaws.com/s3.alaskawild.org/foundation/js/jquery.cookie.js"></script>
+
+	<!-- Font Awesome -->
+	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+	<!-- Custom CSS -->
+	<link rel="stylesheet" href="https://s3.amazonaws.com/s3.alaskawild.org/foundation/css/app.css" />
+
+	<!-- Custom CSS Override -->
+	<link rel="stylesheet" href="https://s3.amazonaws.com/s3.alaskawild.org/foundation/css/override.css" />
+
+	<!-- Custom fonts -->
+	<link href='https://fonts.googleapis.com/css?family=Kaushan+Script' rel='stylesheet' type='text/css'>
+        <link href='https://fonts.googleapis.com/css?family=Courgette' rel='stylesheet' type='text/css'>
+
+	{% block script_additions %}{% endblock %}
+</head>
+
+<body class="{{ filename|split:'.'|nth:0 }}-page lang-{{page.lang.iso_code|default:"unknown"}}{% if page.lang.is_rtl %} ak-rtl{% endif %} ak-no-js {{ page.name}}{% if page.custom_fields.furry_feud %} furry-feud {% endif %}">
+	<script type="text/javascript">actionkit.forms.initPage()</script>
+
+	<div class="container">
+		{% if page.custom_fields.donation_template_2 or page.custom_fields.donation_template_3 or page.custom_fields.donation_template_4 or page.custom_fields.splash_page %}
+			<div class="header-wrapper">
+				<div class="header alternate-layout">
+					<div class="row">
+						<div class="medium-24 columns">
+							<ul class="links">
+								<li><a href="http://www.alaskawild.org/ways-to-give/">Ways to Give</a></li>
+							</ul> <!-- .links -->
+						</div>
+
+						<div class="medium-5 columns logo alternate-layout">
+							<h1>
+								<a href="http://www.alaskawild.org">
+									<img src="https://s3.amazonaws.com/s3.alaskawild.org/foundation/img/small-logo-shadow.png" title="{% client_name %}">
+								</a>
+							</h1>
+						</div> <!-- .logo -->
+					</div> <!-- .row -->
+				</div> <!-- .header -->
+			</div> <!-- .header-wrapper -->
+		{% else %}
+			<div class="header-wrapper">
+				<div class="header">
+					<div class="row">
+						<div class="medium-24 columns">
+							<div class="hide-for-small top-links">
+								<ul class="links">
+									<li><a href="http://www.alaskawild.org/blog" target="_blank">blog</a></li>
+									<li><a href="http://www.alaskawild.org/news" target="_blank">news</a></li>
+									<li><a href="https://act.alaskawild.org/donate/our_store/" target="_blank">shop</a></li>
+									<li class="sign-up"><a href="http://act.alaskawild.org/signup/website_signup_top/">sign up</a></li>
+									<li class="donate"><a href="https://act.alaskawild.org/donate/main/">donate</a></li>
+								</ul> <!-- .links -->
+
+								<div class="socmed">
+									<a href="http://www.facebook.com/KeepAlaskaWild" class="fb" target="_blank"></a>
+									<a href="https://twitter.com/alaskawild" class="tw" target="_blank"></a>
+								</div> <!-- .socmed -->
+
+								<div class="clear"></div>
+							</div> <!-- .top-links -->
+
+							<div class="logo">
+								<h1>
+									<a href="http://www.alaskawild.org">
+										<span class="hidden">Alaska Wilderness League</span>
+
+										{% if page.type = "Donation" %}
+											<img class="donation-logo" src="https://s3.amazonaws.com/s3.alaskawild.org/foundation/img/small-logo-shadow.png" title="{% client_name %}">
+										{% else %}
+											<img src="https://s3.amazonaws.com/s3.alaskawild.org/foundation/img/logo-shadow.png" title="{% client_name %}">
+										{% endif %}
+									</a>
+								</h1>
+							</div> <!-- .logo -->
+						</div> <!-- .medium-24 -->
+					</div> <!-- .row -->
+				</div> <!-- .header -->
+
+				<!-- Starting Top Bar -->
+				<div class="row">
+					<div id="nav" class="medium-24 columns">
+						<div class="mobile-logo show-for-small">
+							<h1>
+								<a href="http://www.alaskawild.org">
+									<img src="https://s3.amazonaws.com/s3.alaskawild.org/foundation/img/small-logo.png" title="{% client_name %}">
+								</a>
+							</h1>
+						</div> <!-- .mobile-logo -->
+
+						<nav class="top-bar" data-topbar>
+							<ul class="title-area">
+								<li class="name hide-for-small">
+									<h1>
+										<a href="<?php echo esc_url( home_url( '/' ) ); ?>" title="<?php echo esc_attr( get_bloginfo( 'name', 'display' ) ); ?>" rel="home">
+											<?php bloginfo( 'name' ); ?>
+										</a>
+									</h1>
+								</li>
+
+								<li class="name show-for-small"></li>
+
+								<li class="top-buttons">
+									<a href="https://act.alaskawild.org/donate/main/">Donate!</a>
+								</li>
+
+								<!-- Remove the class "menu-icon" to get rid of menu icon. Take out "Menu" to just have icon alone -->
+								<li class="toggle-topbar menu-icon"><a href="#"><span>Menu</span></a></li>
+							</ul>
+
+							<section class="top-bar-section">
+								<!-- Right Nav Section -->
+								<ul class="right">
+									<li><a href="http://www.alaskawild.org/who-we-are/"><span class="first">Who</span>We Are</a></li>
+									<li><a href="http://www.alaskawild.org/places-we-protect/"><span class="first">Places</span>we Protect</a></li>
+									<li><a href="http://www.alaskawild.org/what-we-do/"><span class="first">How</span>We Do It</a></li>
+									<li{% if page.type == "Donation" %}{% else %} class="active"{% endif %}><a href="http://www.alaskawild.org/get-involved/action-center"><span class="first">Get</span>Involved</a>{% if page.type == "Donation" %}{% else %}<div class="bottom-triangle"><div></div></div>{% endif %}</li>
+									<li{% if page.type == "Donation" %} class="active"{% else %}{% endif %}><a href="http://www.alaskawild.org/ways-to-give/"><span class="first">Ways</span>to Give</a>{% if page.type == "Donation" %}<div class="bottom-triangle"><div></div></div>{% else %}{% endif %}</li>
+								</ul>
+							</section>
+						</nav> <!-- .top-bar --> 
+					</div> <!-- medium-24 -->
+				</div> <!-- .row -->
+			</div> <!-- .header-wrapper -->
+		{% endif %}
+
+		<div class="body-wrapper">
+			<div class="row body">
+				{% block content %}{% endblock %}
+			</div>
+		</div> <!-- .body -->
+
+		{% if page.custom_fields.splash_page %}
+		{% else %}
+			<div class="row footer">
+				<div class="medium-24 columns">
+					<span>{% filter ak_text:"org_name" %}{% client_name %}{% endfilter %}<br></span>
+					<span><a href="http://www.alaskawild.org/privacy-policy">{{ 'Privacy'|ak_text:'privacy' }}</a></span>&nbsp;|&nbsp;
+					<span><a href="mailto:info@alaskawild.org">{{ 'Contact'|ak_text:'contact' }}</a></span>
+				</div> <!-- .medium-24 -->
+			</div> <!-- .footer -->
+		{% endif %}
+
+		{% block below_form %}
+			<script type="text/javascript">
+				actionkit.forms.contextRoot = '/context/';
+				actionkit.forms.initForm('act');
+			</script>
+		{% endblock %}
+
+		{% if analytics_key %}
+			<script type="text/javascript">
+				(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+				(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+				m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+				})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+				ga('create', 'UA-9703787-1', 'auto');
+				ga('send', 'pageview');
+			</script>
+		{% endif %}
+	</div> <!-- .container -->
+
+	<!-- Foundation JS -->
+	<script src="https://s3.amazonaws.com/s3.alaskawild.org/foundation/js/foundation.min.js"></script>
+
+	<script>
+		// Initalize Foundation
+		$(document).foundation();
+
+		$(document).ready(function() {
+			{% comment %}
+				/*
+					---------------------------------------------------------------
+						START - Google Analytics General Tracking
+					---------------------------------------------------------------			
+				*/
+			{% endcomment %}
+
+			// Send GA Event Tracking Info
+			ga('send', 'event', 'View', 'Template Used', 'Foundation Templateset');
+
+			ga('send', 'event', 'View', 'Type', '{{ page.type }}');
+
+			// Determine if we are on the thank you page or not
+			{% if filename|split:'.'|nth:0 == "thanks" %}
+				ga('send', 'event', 'View', 'Step', 'Completed ({{ page.type }})');
+				ga('send', 'event', 'View', 'Step', 'Completed ({{ page.id }})');
+
+				{% if user.email %}
+					ga('send', 'event', 'View', 'User', 'Completed ({{ user.email }} on {{ page.id }})');
+				{% endif %}
+			{% else %}
+				ga('send', 'event', 'View', 'Step', 'Ask ({{ page.type }})');
+				ga('send', 'event', 'View', 'Step', 'Ask ({{ page.id }})');
+
+				{% if user.email %}
+					ga('send', 'event', 'View', 'User', 'Ask ({{ user.email }} on {{ page.id }})');
+				{% endif %}
+			{% endif %}
+
+			{% comment %}
+				/*
+					---------------------------------------------------------------
+						END - Google Analytics General Tracking
+					---------------------------------------------------------------			
+				*/
+			{% endcomment %}
+		});		
+	</script>
+
+	{% if page.custom_fields.splash_page %}
+		<style>
+			body {
+				background: url({{ page.custom_fields.splash_page }}) no-repeat center center fixed;
+				-webkit-background-size: cover;
+				-moz-background-size: cover;
+				-o-background-size: cover;
+				background-size: cover;
+			}
+
+			@media screen and (max-width: 50.5625rem) {
+				body {
+					background: #aaa;
+
+					{% if page.custom_fields.splash_page_mobile %}
+						background: url({{ page.custom_fields.splash_page_mobile }}) no-repeat center center fixed;
+						-webkit-background-size: cover;
+						-moz-background-size: cover;
+						-o-background-size: cover;
+						background-size: cover;
+					{% endif %}
+				}
+			}
+		</style>
+	{% endif %}
+{% comment %}
+	/*
+-------------------------------------------------------------------------------
+	@START - TAF Tracking
+-------------------------------------------------------------------------------
+	*/
+{% endcomment %}
+	<script>
+		$( document ).ready( function() {
+			// Try to load the TAF information from the URL
+			var urlData = getURLParameter( 'data' );
+
+			// Try to load the AK provided information
+			var akid = getURLParameter( 'referring_akid');
+
+			// Variables to hold the source and referrer
+			var actionSource = "";
+			var actionReferrer = "";
+
+			// Did we find the data parameter?
+			if( urlData != null ) {
+				// Split the information on the -
+				urlData = urlData.split( '-' );
+			
+				actionSource = urlData[1];
+				actionReferrer = urlData[0];
+			
+			// Did we find a referral AKID in the url?
+			} else if ( akid != null ) {
+				// Set the source
+				actionSource = getURLParameter( 'source' );
+
+				// Split the AKID into it's three parts
+				akid = akid.split( '.' );
+
+				// We only care about the user ID, the middle part
+				actionReferrer = akid[1];
+			} 
+
+			// Add the hidden fields to the form with the correct data
+			$( 'form[name="act"]' ).append( '<input name="action_source" type="hidden" value="' + actionSource + '">' ).append(
+				'<input name="action_referrer" type="hidden" value="' + actionReferrer + '">'
+			);
+		});
+
+		function getURLParameter(name) {
+			return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search)||[,""])[1].replace(/\+/g, '%20'))||null;
+		}
+	</script>
+{% comment %}
+	/*
+-------------------------------------------------------------------------------
+	@END - TAF Tracking
+-------------------------------------------------------------------------------
+	*/
+{% endcomment %}
+{% comment %}
+	/*
+-------------------------------------------------------------------------------
+	@START - GA Event Tracking
+-------------------------------------------------------------------------------
+	*/
+{% endcomment %}
+
+	<script>
+		// Global Variable to tell if AK knows who the visitor is or not
+		var knownUser = {% if user.email %}true{% else %}false{% endif %};
+
+		$(document).ready(function() {
+			// Send GA Event Tracking Info
+			ga('send', 'event', 'View', 'Template Used', 'Foundation Templateset');
+
+			ga('send', 'event', 'View', 'Type', '{{ page.type }}');
+
+			// Determine if we are on the thank you page or not
+			{% if filename|split:'.'|nth:0 == "thanks" %}
+				ga('send', 'event', 'View', 'Step', 'Completed ({{ page.type }})');
+				ga('send', 'event', 'View', 'Step', 'Completed ({{ page.id }})');
+
+				if(knownUser) {
+					ga('send', 'event', 'View', 'User', 'Completed ({{ user.email }} on {{ page.id }})');
+				} else {
+					ga('send', 'event', 'View', 'User', 'Completed (Unknown User on {{ page.id }})');
+				}
+			{% else %}
+				ga('send', 'event', 'View', 'Step', 'Ask ({{ page.type }})');
+				ga('send', 'event', 'View', 'Step', 'Ask ({{ page.id }})');
+
+				if(knownUser) {
+					ga('send', 'event', 'View', 'User', 'Ask ({{ user.email }} on {{ page.id }})');
+				} else {
+					ga('send', 'event', 'View', 'User', 'Ask (Unknown User on {{ page.id }})');				
+				}
+			{% endif %}
+
+			// See if this user has visited the site before
+			if(typeof $.cookie('user') !== 'undefined') {
+				{% if filename|split:'.'|nth:0 == "thanks" %}
+					ga('send', 'event', 'Cookie', 'View', 'Completed (' + $.cookie('user') + ' on {{ page.id }})');
+					ga('send', 'event', 'Cookie', $.cookie('user'), 'Completed ({{ page.id }})');
+				{% else %}
+					ga('send', 'event', 'Cookie', 'View', 'Ask (' + $.cookie('user') + ' on {{ page.id }})');
+					ga('send', 'event', 'Cookie', $.cookie('user'), 'Ask ({{ page.id }})');
+				{% endif %}
+			}
+
+			// See if the current user has visited this page before
+			{% if filename|split:'.'|nth:0 == "thanks" %}
+				if(typeof $.cookie('thanks-{{ page.id }}') === 'undefined') {
+					ga('send', 'event', 'Cookie', 'View', 'Unique Completed ({{ page.id }})');
+					$.cookie('thanks-{{ page.id }}', 'yes', { expires: 365, path: '/' });
+				}
+			{% else %}
+				if(typeof $.cookie('ask-{{ page.id }}') === 'undefined') {
+					ga('send', 'event', 'Cookie', 'View', 'Unique Ask ({{ page.id }})');
+					$.cookie('ask-{{ page.id }}', 'yes', { expires: 365, path: '/' });
+				}
+			{% endif %}
+
+			// Add the email cookie on form submit
+			$('#act').submit(function() {
+				if(typeof $.cookie('user') === 'undefined') {
+					if(knownUser) {
+						$.cookie('user', '{{ user.email }}', { expires: 365,  path: '/' });
+					} else if ( $('#email').val() != "" ) {
+						$.cookie('user', $('#email').val(), { expires: 365, path: '/'});
+					}
+				}
+			});
+		});
+	</script>
+{% comment %}
+	/*
+-------------------------------------------------------------------------------
+	@END - GA Event Tracking
+-------------------------------------------------------------------------------
+	*/
+{% endcomment %}	
+</body>
+<!-- @END wrapper.html -->
+</html>

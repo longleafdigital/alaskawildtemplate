@@ -1,0 +1,150 @@
+{% extends "./wrapper.html" %}{% load actionkit_tags %}
+
+{% block content %}
+<!-- @START survey.html -->
+	<div class="medium-24 columns page-title">
+		<h2>{{ page.title }}</h2>
+	</div>
+
+	<form class="ak-form" name="act" method="POST" action="/act/" accept-charset="utf-8">
+		<input type="hidden" name="page" value="{{ page.name }}">
+		<input type="hidden" name="required" value="country">
+
+		{% if page.custom_fields.wide_survey %}
+			<div class="medium-24 columns survey-top">
+				{% autoescape off %}
+					<div>{% include_tmpl form.introduction_text %}</div>
+				{% endautoescape %} 
+			</div> <!-- .survey-top -->
+		{% endif %}
+
+		<div class="{% if page.custom_fields.wide_survey %}medium-24 wide-survey {% else %}medium-9 medium-push-14 {% endif %} right-column columns">
+			<div class="form-pretext">
+				{% if page.custom_fields.custom_form_title %}{{ page.custom_fields.custom_form_title }}{% else %}Take Our Survey!{% endif %}
+			</div>
+
+			{% if not page.custom_fields.wide_survey and not page.custom_fields.survey_questions_first %}
+				<div class="user-form-wrapper">
+					{% include "./user_form_wrapper.html" %}
+				</div> <!-- .user-form-wrapper -->
+			{% endif %}
+
+
+			<div id="survey-questions" class="survey-questions">
+				{% autoescape off %}
+					{% if page.custom_fields.wide_survey and not page.custom_fields.survey_questions_first %}
+						<div class="row user-form-wrapper">
+							<div class="medium-24 columns">
+								{% include "./user_form_wrapper.html" %}
+							</div>
+						</div>
+					{% endif %}
+
+					{% for question in form.surveyquestion_set.all %}
+						{% if page.custom_fields.wide_survey %}
+							<div class="row">
+						{% endif %}
+					
+						<div class="{% if page.custom_fields.wide_survey %}medium-24 columns{% endif %}{% if forloop.last %} last{% endif %}">
+							<label>{{ question.question_label }}</label>
+							{{ question.question_html }}
+						</div>
+
+						{% if page.custom_fields.wide_survey %}
+							</div> <!-- .row -->
+						{% endif %}
+					{% endfor %}
+
+					{% if page.custom_fields.wide_survey and page.custom_fields.survey_questions_first %}
+						<div class="row user-form-wrapper">
+							<div class="medium-24 columns">
+								{% include "./user_form_wrapper.html" %}
+
+								{% if not page.custom_fields.signup_notice and page.custom_fields.furry_feud %}
+									<div class="row">
+										<div class="large-24 columns notifcation">
+											<p>When you take action you will be signed up for periodic email alerts and communications from Alaska Wilderness League.</p>
+										</div>
+									</div>
+								{% endif %}
+							</div>
+						</div>
+					{% endif %}
+				{% endautoescape %}
+			</div> <!-- .survey-questions -->
+
+			{% if not page.custom_fields.wide_survey and page.custom_fields.survey_questions_first %}
+				<div class="user-form-wrapper">
+					{% include "./user_form_wrapper.html" %}
+				</div> <!-- .user-form-wrapper -->
+			{% endif %}
+
+			<div class="submit-button">
+				<button type="submit">{% if page.custom_fields.submit_button_text %}{{ page.custom_fields.submit_button_text }}{% else %}Submit{% endif %}</button>
+			</div> <!-- .submit-button -->
+
+			{% if not page.custom_fields.signup_notice and not page.custom_fields.furry_feud %}
+				<div class="row">
+					<div class="large-24 columns notifcation">
+						<p>When you take action you will be signed up for periodic email alerts and communications from Alaska Wilderness League.</p>
+					</div>
+				</div>
+			{% endif %}
+
+			{% include "./progress_meter.html" %}
+		</div> <!-- .right-column .wide-survey -->
+
+		{% if not page.custom_fields.wide_survey %}
+			<div class="medium-13 medium-offset-1 medium-pull-9 columns about-text">
+				{% autoescape off %}
+					<div>{% include_tmpl form.introduction_text %}</div>
+				{% endautoescape %}
+			</div> <!-- .about-text -->
+		{% endif %}
+	</form>
+
+	{% if page.custom_fields.furry_feud %}
+		<script>
+			$( '.animal img' ).click( function(e) {
+				// Read the data attribute "animal" from the element clicked
+				var animal = $( this ).data( 'animal' );
+
+				// Check if the "show-factoid" class is missing (ie is it currently invisible)
+				if( !$( this ).hasClass( 'show-factoid' ) ) {
+					// Remove show-factoid from all animal image elements
+					$( '.animal img' ).removeClass( 'show-factoid' );
+
+					// Fade out any animal elements EXCEPT the one clicked on
+					$(' .fact-popup:not(#factoid-' + animal +') ' ).fadeOut( 300 );
+
+					// Fade in the one clicked on
+					$( '#factoid-' + animal ).fadeIn( 300 );
+
+					// Add the show-factoid class to the image
+					$( this ).addClass( 'show-factoid' );
+				// We found the show-factoid class, so we need to hide this one
+				} else {
+					// Remove the show-factoid class from the image
+					$( this ).removeClass( 'show-factoid' );
+
+					// Fade out this factoid
+					$( '#factoid-' + animal ).fadeOut( 300 );
+				}
+			});
+
+			$( '.factoid-close' ).click( function() {
+				var img = $( this ).parent().parent().children('img');
+
+				// Read the data attribute "animal" from the element clicked
+				var animal = img.data( 'animal' );
+
+				// Remove the show-factoid class from the image
+				img.removeClass( 'show-factoid' );
+
+				// Fade out this factoid
+				$( '#factoid-' + animal ).fadeOut( 300 );
+			});
+		</script>
+	{% endif %}
+<!-- @END survey.html -->
+{% endblock %}

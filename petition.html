@@ -1,0 +1,201 @@
+{% extends "./wrapper.html" %}
+
+{% load actionkit_tags %}
+
+{% block content %}
+	<!-- @START petition.html -->
+
+	<div class="medium-24 columns page-title">
+		<h2>{{ page.title }}</h2>
+	</div>
+
+	<form class="ak-form" name="act" method="POST" action="/act/" accept-charset="utf-8">
+		<input type="hidden" name="page" value="{{ page.name }}">
+
+		{% if page.custom_fields.wide_survey %}
+			<div class="medium-24 columns survey-top">
+				{% autoescape off %}
+					<div>{% include_tmpl form.introduction_text %}</div>
+				{% endautoescape %} 
+			</div> <!-- .survey-top -->
+		{% endif %}
+
+		<div class="{% if page.custom_fields.wide_survey %}medium-24 wide-survey {% else %}medium-9 medium-push-14 {% endif %} columns right-column">
+			
+			{% if page.custom_fields.wide_survey %}
+				<div class="medium-24 columns about-text">
+					{% if form.statement_leadin %}
+						<div class="lead-in">
+							{% include_tmpl form.statement_leadin %}
+						</div> <!-- .petition-to -->
+					{% endif %}
+
+					{% autoescape off %}
+						<div>{% include_tmpl form.about_text %}</div>
+					{% endautoescape %} 
+				</div> <!-- .about-text -->
+			{% endif %}
+
+
+			{% if not page.custom_fields.wide_survey %}
+			<div class="form-pretext">
+				{% if page.custom_fields.custom_form_title %}
+					{% include_tmpl page.custom_fields.custom_form_title %}
+				{% else %}
+					Send a letter!
+				{% endif %}
+			</div>
+			{% endif %}
+
+			<div class="petition-form">
+				
+				{% if not page.custom_fields.wide_survey %}
+				<div class="statement-text">
+					{% include_tmpl form.statement_text %}
+				</div> <!-- .statement-text -->
+				{% endif %}
+
+				{% if not page.custom_fields.wide_survey and not page.custom_fields.survey_questions_first %}
+					{% include "./user_form_wrapper.html" %}
+				{% endif %}
+
+				{% autoescape off %}
+
+				{% if page.custom_fields.wide_survey and not page.custom_fields.survey_questions_first %}
+					<div class="row user-form-wrapper">
+						<div class="medium-24 columns">
+							{% include "./user_form_wrapper.html" %}
+						</div>
+					</div>
+				{% endif %}
+
+					{% if page.custom_fields.wide_survey %}
+							<div class="row">
+						{% endif %}
+
+
+					 {% if page.custom_fields.fav_animal %}
+								<div class="clear"></div>
+								<div class="fav-animal">
+										 {{page.custom_fields.fav_animal}}
+										 <div class="clear"></div>
+								</div>
+					 {% endif %}
+
+					 {% if page.custom_fields.fav_activity %}
+								<div class="clear"></div>
+								<div class="fav-activity">
+										 {{page.custom_fields.fav_activity}}
+										 <div class="clear"></div>
+								</div>
+					 {% endif %}
+
+					 {% if page.custom_fields.tagline %}
+								<div class="clear"></div>
+								<div class="tagline">
+										 {{page.custom_fields.tagline}}
+										 <div class="clear"></div>
+								</div>
+					 {% endif %}
+
+					 {% if page.custom_fields.wide_survey %}
+							</div> <!-- .row -->
+						{% endif %}
+
+						{% if page.custom_fields.wide_survey and page.custom_fields.survey_questions_first %}
+						
+						<div class="form-pretext">
+							{% if page.custom_fields.custom_form_title %}
+								{% include_tmpl page.custom_fields.custom_form_title %}
+							{% else %}
+								Customize your card!
+							{% endif %}
+						</div>
+						<div class="row user-form-wrapper">
+							<div class="medium-24 columns">
+								<div class="statement-text">
+									{% include_tmpl form.statement_text %}
+								</div> <!-- .statement-text -->
+				
+								<div class="ak-field">
+									<!--<label class="wide" for="id_comment">Comment</label>-->
+									<textarea id="id_comment" name="action_comment" placeholder="{% if page.custom_fields.comment_title %}{{ page.custom_fields.comment_title }}{% else %}Comment{% endif %}"></textarea>
+								</div>
+
+								{% include "./user_form_wrapper.html" %}
+
+								{% if not page.custom_fields.signup_notice and page.custom_fields.furry_feud %}
+									<div class="row">
+										<div class="large-24 columns notifcation">
+											<p>When you take action you will be signed up for periodic email alerts and communications from Alaska Wilderness League.</p>
+										</div>
+									</div>
+								{% endif %}
+							</div>
+						</div>
+					{% endif %}
+
+				{% endautoescape %}
+
+			{% if not page.custom_fields.survey_questions_first %}
+				<div class="ak-field">
+					<!--<label class="wide" for="id_comment">Comment</label>-->
+					<textarea id="id_comment" name="action_comment" placeholder="{% if page.custom_fields.comment_title %}{{ page.custom_fields.comment_title }}{% else %}Comment{% endif %}"></textarea>
+				</div>
+			{% endif %}
+				{% include "./progress_meter.html" %}
+
+				{% if not page.custom_fields.wide_survey and page.custom_fields.survey_questions_first %}
+					<div class="user-form-wrapper">
+						{% include "./user_form_wrapper.html" %}
+					</div> <!-- .user-form-wrapper -->
+				{% endif %}
+
+				<div class="submit-button">
+					<button type="submit">{% if page.custom_fields.submit_button_text %}{{ page.custom_fields.submit_button_text }}{% else %}Sign{% endif %}</button>
+				</div> <!-- .submit-button -->
+
+				{% if not page.custom_fields.signup_notice %}
+					<div class="signup-notice notifcation">
+						<p>When you take action you will be signed up for periodic email alerts and communications from Alaska Wilderness League.</p>
+					</div> <!-- .signup-notice -->
+				{% endif %}
+
+				{% include "./inline_tellafriend.html" %}
+			</div> <!-- .petition-form -->
+		</div> <!-- .medium-9 -->
+
+		{% if not page.custom_fields.wide_survey %}
+			<div class="medium-13 medium-offset-1 medium-pull-9 columns left-column about-text">
+				{% if form.statement_leadin %}
+					<div class="lead-in">
+						{% include_tmpl form.statement_leadin %}
+					</div> <!-- .petition-to -->
+				{% endif %}
+
+				{% autoescape off %}
+					<div>{% include_tmpl form.about_text %}</div>
+				{% endautoescape %} 
+			</div> <!-- .about-text -->
+		{% endif %}
+	</form>
+
+	<script>
+		$(document).ready(function() {
+			$('.statement-text p:first-child').css("display", "block");
+			$('.statement-text p:nth-child(2)').css("display", "block");
+
+			if($('.statement-text p').length > 2) {
+				$('.statement-text p:nth-child(2)').append("<a class='read-more' style='display: block;'> Read More...</a>");
+			}
+
+			$('.read-more').click(function() {
+				$('.read-more').fadeOut(250).hide();
+
+				$('.statement-text p').fadeIn(250);
+			});
+		});
+	</script>
+
+	<!-- @END petition.html -->
+{% endblock %}

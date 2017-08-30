@@ -1,0 +1,494 @@
+{% extends "./wrapper.html" %}{% load actionkit_tags %}
+
+{% block meta_additions %}<meta property="og:url" value="{{ page.canonical_url }}">{% endblock %}
+{% block script_additions %}<script>fbq('track', 'CompleteRegistration');</script>{% endblock %}
+{% block content %}
+	<!-- @START thanks.html -->
+
+	{% autoescape off %}
+		{% if actionkit_user %}
+			{% if recurring_update or recurring_cancel %}
+				<p class="area">
+					{% filter ak_text:"logged_in_as" %}You are logged in as{% endfilter %} {{ actionkit_user.name }}. <a href="/logout">{% filter ak_text:"logout" %}Click to log out.{% endfilter %}</a>
+				</p>
+			{% endif %}
+		{% endif %}
+		
+		{% if page.followup.send_taf and args.taf or page.custom_fields.force_share_buttons %}
+			<form name="taf" method="POST" action="/update_action/" accept-charset="utf-8" class="thank-you-form{% if page.custom_fields.shareprogress %} shareprogress{% endif %}">
+				<div class="page-title medium-24 columns">
+					{% if page.custom_fields.thank_you_header_text %}
+						<h2>{{ page.custom_fields.thank_you_header_text }}</h2>
+					{% else %}
+						<h2>You're almost done! <span class="ak-mobile-only">&#10003;</span></h2>
+					{% endif %}
+					
+					
+
+					{% comment %}
+						{% include './social_plugins.html' %}
+					{% endcomment %}
+				</div> <!-- .page-title -->
+
+
+				<div class="page-text {% if page.custom_fields.ecard %} medium-24 {% else %} medium-14{% endif %} columns">
+					{% filter ak_text:"tell_your_friends_banner" %}
+						{% if page.custom_fields.shareprogress %}
+							<div class="ak-blurb">{% include_tmpl form.thank_you_text %}</div>
+
+							{% if not page.custom_fields.ecard %}
+								{% if page.custom_fields.thank_you_page_image %}
+									<img src="{{ page.custom_fields.thank_you_page_image }}" />
+								{% else %}
+									<img src="https://s3.amazonaws.com/s3.alaskawild.org/foundation/img/spreadtheword2.gif" />
+								{% endif %}
+							{% endif %}
+
+						{% else %}
+							<p class="ak-blurb">{% include_tmpl form.thank_you_text %}</p>
+						{% endif %}
+					{% endfilter %}
+
+
+					 
+					{% if page.custom_fields.furry_feud and not page.custom_fields.ecard %}
+						<div class="row furry-feud-results">
+							<div class="medium-12 columns hunters">
+								<h3>Hunters</h3>
+
+								<canvas id="hunters-poll" width="200" height="200"></canvas>
+							</div>
+
+							<div class="medium-12 columns flyers">
+								<h3>Flyers</h3>
+
+								<canvas id="flyers-poll" width="200" height="200"></canvas>
+							</div>
+						</div>
+
+						<div class="row furry-feud-results">
+							<div class="medium-12 columns gentle-giants">
+								<h3>Gentle Giants</h3>
+
+								<canvas id="gentle-poll" width="200" height="200"></canvas>
+							</div>
+
+							<div class="medium-12 columns swimmers">
+								<h3>Swimmers</h3>
+
+								<canvas id="swimmers-poll" width="200" height="280"></canvas>
+							</div>
+						</div>
+					{% endif %}
+					
+
+					{% if page.custom_fields.shareprogress %}
+					{% elif not page.custom_fields.furry_feud %}
+						<div class="thank-you-image hide-for-small">
+							{% if page.custom_fields.thank_you_page_image %}
+								<img src="{{ page.custom_fields.thank_you_page_image }}" />
+							{% else %}
+								<img src="https://s3.amazonaws.com/s3.alaskawild.org/foundation/img/spreadtheword2.gif" />
+							{% endif %}
+						</div> <!-- .thank-you-image -->
+					{% endif %}
+				</div> <!-- .top-text -->
+
+				<input type="hidden" name="page" value="{{ page.name }}">
+
+				{% if page.custom_fields.shareprogress %}
+					<div class="medium-10 columns">
+						<div id="sp_share_page" page_url="{{page.canonical_url}}"></div>
+					</div>
+				{% else %}
+
+				{% if page.custom_fields.ecard %}
+					<div class="page-text medium-14 columns">
+						{% if page.custom_fields.thank_you_page_image %}
+							<img src="{{ page.custom_fields.thank_you_page_image }}" />
+						{% else %}
+							<img src="https://s3.amazonaws.com/s3.alaskawild.org/foundation/img/spreadtheword2.gif" />
+					</div>
+						{% endif %}
+				{% endif %}
+					<div class="medium-10 columns taf-buttons">
+						{% if page.custom_fields.furry_feud and not page.custom_fields.ecard %}
+							<div class="row">
+								<div class="large-24 columns">
+									<p>Share the Feud with your friends using the share tools, below, or just copy and paste this URL: <a href="http://act.alaskawild.org/survey/fuzzyfeud?u={{ page.canonical_url }}?data={{ user.id }}-personal" title="Fuzzy Feud Thanks">http://act.alaskawild.org/survey/fuzzyfeud?u={{ page.canonical_url }}?data={{ user.id }}-personal</a></p>
+								</div>
+							</div>
+						{% endif %}
+
+						<div class="ak-sharebox">
+							<div class="row">
+								<div class="large-3 columns taf-icon">
+									<i class="fa fa-envelope-square"></i>
+								</div> <!-- .taf-icon -->
+
+								<div class="large-19 columns">
+									<a href="mailto:?subject={{ page.followup.taf_subject|urlencode}}&amp;body={% filter referring_akid:akid|tag_links:"source=mailto"|urlencode %}{% include_tmpl page.followup.taf_body escaped %}{% endfilter %}" class="" target="_blank">{% filter ak_text:"taf_mailto_ask" %}Email your friends &raquo;{% endfilter %}</a>
+
+									<div class="taf-text">Click the above to open your email browser, or copy and paste the message below into an email message.</div>
+<textarea class="ak-share-message" row="10">
+Subject: {{ page.title }}
+
+{% filter referring_akid:akid|tag_links:"source=tafemail" %}{% include_tmpl page.followup.taf_body escaped %}{% endfilter %}
+
+</textarea>
+								</div> <!-- .large-18 columns -->
+							</div> <!-- .row -->
+						</div> <!-- .ak-sharebox -->
+
+						{% if not page.custom_fields.share_buttons %}
+							<div class="ak-sharebox">
+								<div class="row">
+									<div class="large-3 columns taf-icon">
+										<i class="fa fa-facebook-square"></i>
+									</div> <!-- .taf-icon -->	
+
+									<div class="large-19 columns">
+										<a href="/share/link?type=fb&amp;page_name={{page.name}}&amp;action_id={{action.id}}&amp;akid={{akid}}" class="ak-facebook ak-share-button" target="_blank">Share on Facebook &raquo;</a>
+
+										{% if page.followup.share_image %}
+											<div class="row">
+												<div class="large-10 columns">
+													<img src="{{ page.followup.share_image }}">
+												</div>
+												
+												<div class="small-taf-text large-14 columns">
+													{% if page.followup.share_description|length >= 1 %}
+														{{ page.followup.share_description }}
+													{% else %}
+															{% include_tmpl page.about_text %}{% include_tmpl form.introduction_text %}
+													{% endif %}
+												</div>
+											</div>
+										{% else %}
+											<div class="small-taf-text">
+												{% if page.followup.share_description|length >= 1 %}
+													{{ page.followup.share_description }}
+												{% else %}
+													{% include_tmpl page.about_text %}{% include_tmpl form.introduction_text %}
+												{% endif %}
+											</div>
+										{% endif %}
+									</div>
+								</div>
+							</div> <!-- .sharebox -->
+
+
+						<div class="ak-sharebox clear">
+							<div class="row">
+								<div class="large-3 columns taf-icon">
+									<i class="fa fa-twitter-square"></i>
+								</div> <!-- .taf-icon -->
+							
+								<div class="large-19 columns">
+									<a href="/share/link?type=tw&amp;page_name={{page.name}}&amp;action_id={{action.id}}&amp;akid={{akid}}" class="ak-twitter ak-share-button tw-button" target="_blank">Tweet this action &raquo;</a>
+
+									<div class="small-taf-text">
+										{% if page.followup.twitter_message %}
+											{{ page.followup.twitter_message }}
+										{% else %}
+											{{ page.title }}
+										{% endif %}
+									</div>
+
+									<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+								</div>
+							</div>
+						</div> <!-- .sharebox -->
+						{% endif %}
+
+						{% if page.goal %}
+							<div class="ak-sharebox ak-hidden-mobile">
+								{% include "./progress_meter.html" %}
+							</div>
+						{% endif %}
+					</div> <!-- .taf-buttons -->
+				{% endif %}
+			</form>
+
+			<script type="text/javascript">
+				if (actionkit.args.taf) { 
+					 $("#taf").show();
+				}
+
+				$(document).ready(function() {
+					 $('.ak-emailalt').click(function() {
+						  $('#taf-form').slideToggle();
+					 });
+				});
+			</script>
+
+		{% else %}
+				{% comment %}
+					What's below shows if either the person used the tell-a-friend feature integrated into petitions, etc., or if the page has tell-a-friend turned off entirely. You can use this space to push people to take some other action (donate after signing a petition, say). You can also use {% if page.followup.send_taf %} here to show different content for pages that have tellafriend versus those that don't.
+				{% endcomment %}
+
+				{% filter ak_text:"notaf_thanks_banner" %}
+					{% if page.custom_fields.shareprogress %}<div class="shareprogress">{% endif %}
+						 <div class="page-title medium-24 columns">
+							{% if page.custom_fields.thank_you_header_text %}
+								<h2>{{ page.custom_fields.thank_you_header_text }}</h2>
+							{% else %}
+								<h2>Thank you! You're almost done! <span class="ak-mobile-only">&#10003;</span></h2>
+							{% endif %}
+						 </div> <!-- .page-title -->
+						 
+						 <div class="page-text {% if page.custom_fields.share_buttons %}medium-14 {% else %}medium-24 {% endif %}columns">
+							{% filter ak_text:"tell_your_friends_banner" %}
+								{% if page.custom_fields.shareprogress %}
+									<div id="sp_share_page" page_url="{{page.canonical_url}}"></div>
+								{% else %}
+									<p class="ak-blurb">{% include_tmpl form.thank_you_text %}</p>
+
+								{% if page.custom_fields.share_buttons %}
+									{% endif %}
+								{% endif %}
+							{% endfilter %}
+
+							{% if not page.custom_fields.show_page_recent_actions %}
+							<div class="thank-you-image hide-for-small">
+								{% if page.custom_fields.thank_you_page_image %}
+									<img src="{{ page.custom_fields.thank_you_page_image }}" />
+								{% else %}
+									{% if page.custom_fields.share_buttons %}
+										<img src="https://s3.amazonaws.com/s3.alaskawild.org/foundation/img/spreadtheword2.gif" />
+									{% endif %}
+								{% endif %}
+							</div> <!-- .thank-you-image -->
+							{% endif %}
+						</div> <!-- .top-text -->
+						
+						<!-- block of code for recipe display logic -->
+						{% if page.custom_fields.show_page_recent_actions %}
+						<h3></h3>
+						<hr>
+							{% for action in page.recent_actions %}
+								{{ action.custom_fields.Recipe|linebreaks }}
+								<p><em>- {{ action.user.name }}, {{ action.user.state }}
+</em></p>
+								<hr>
+							{% endfor %}
+						{% endif %}
+
+						{% if not page.custom_fields.show_page_recent_actions %}
+						 {% if page.custom_fields.shareprogress %}
+						 {% else %}
+							{% if not page.custom_fields.share_buttons %}
+								<div class="medium-10 columns">
+									<div class="ak-sharebox">
+										<div class="row">
+											<div class="large-3 columns taf-icon">
+												<i class="fa fa-facebook-square"></i>
+											</div> <!-- .taf-icon -->	
+
+											<div class="large-19 columns">
+												<a href="/share/link?type=fb&amp;page_name={{page.name}}&amp;action_id={{action.id}}&amp;akid={{akid}}" class="ak-facebook ak-share-button" target="_blank">Share on Facebook &raquo;</a>
+
+												{% if page.followup.share_image %}
+													<div class="row">
+														<div class="large-10 columns">
+															<img src="{{ page.followup.share_image }}">
+														</div>
+														
+														<div class="small-taf-text large-14 columns">
+															{% if page.followup.share_description|length >= 1 %}
+																{{ page.followup.share_description }}
+															{% else %}
+																	{% include_tmpl page.about_text %}{% include_tmpl form.introduction_text %}
+															{% endif %}
+														</div>
+													</div>
+												{% else %}
+													<div class="small-taf-text">
+														{% if page.followup.share_description|length >= 1 %}
+															{{ page.followup.share_description }}
+														{% else %}
+															{% include_tmpl page.about_text %}{% include_tmpl form.introduction_text %}
+														{% endif %}
+													</div>
+												{% endif %}
+											</div>
+										</div>
+									</div> <!-- .sharebox -->
+
+									<div class="ak-sharebox clear">
+										<div class="row">
+											<div class="large-3 columns taf-icon">
+												<i class="fa fa-twitter-square"></i>
+											</div> <!-- .taf-icon -->
+										
+											<div class="large-19 columns">
+												<a href="/share/link?type=tw&amp;page_name={{page.name}}&amp;action_id={{action.id}}&amp;akid={{akid}}" class="tw-button ak-twitter ak-share-button" target="_blank">Tweet this action &raquo;</a>
+
+												<div class="small-taf-text">
+													{% if page.followup.twitter_message %}
+														{{ page.followup.twitter_message }}
+													{% else %}
+														{{ page.title }}
+													{% endif %}
+												</div>
+
+												<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+											</div>
+										</div>
+									</div> <!-- .sharebox -->
+								</div>
+							{% endif %}
+						{% endif %}
+						
+
+						 {% comment %}
+						 <div class="span-16">
+							  <div class="ak-sharebox">
+								   <span class="ak-share-url-text ak-hidden-mobile">Share URL:</span>  <input class="ak-share-url" value="{{ page.canonical_url }}"/>
+							  </div>
+
+							  <div class="ak-sharebox">
+								   <form name="taf">
+										<input type="hidden" name="page" value="{{ page.name }}">
+
+										{% include "./progress_meter.html" %}
+								   </form>
+							  </div>
+						 </div>
+						 {% endcomment %}
+					{% if page.custom_fields.shareprogress %}</div> <!-- .shareprogress -->{% endif %}
+					{% endif %}
+			   {% endfilter %}
+			   
+			   <div class="area">
+					<form class="floating-progress ak-hidden-mobile" name="taf">
+						 <input type="hidden" name="page" value="{{ page.name }}">
+
+						 {% include "./progress_meter.html" %}
+					</form>
+
+					{% comment %}
+						 {% include './social_plugins.html' %}
+					{% endcomment %}
+			   </div>
+		  {% endif %}
+
+		  <div id="sent-modal" class="reveal-modal small" data-reveal>
+			   <h3>Thank you!</h3>
+			   <p>Your email(s) have been sent!</p>
+				<a class="close-reveal-modal">&#215;</a>
+		  </div>
+	 {% endautoescape %}
+
+	 <script>
+		  // Reads URL components. Credit: http://stackoverflow.com/questions/1403888/get-escaped-url-parameter
+		  function getURLParameter(name) {
+			   return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search)||[,""])[1].replace(/\+/g, '%20'))||null;
+		  }
+
+		  $(document).ready(function() {
+			   // See if they sent an email through AK
+			   if(getURLParameter('did_taf') == 1) {
+					$('#sent-modal').foundation('reveal', 'open');
+			   }
+		  });
+	 </script>
+
+	{% if page.custom_fields.furry_feud %}
+		<script src="https://s3.amazonaws.com/s3.alaskawild.org/foundation/js/Chart.min.js"></script>
+
+		<script>
+			// Turn machine names into nice names
+			var animals = {
+				polar_bear: "Polar Bear",
+				gray_wolf: "Gray Wolf",
+				arctic_fox: "Arctic Fox",
+
+				owl: "Snowy Owl",
+				tern: "Arctic Tern",
+				eagle: "Bald Eagle",
+
+				caribou: "Caribou",
+				moose: "Moose",
+				ox: "Muskox",
+
+				walrus: "Walrus",
+				beluga: "Beluga Whale",
+				seal: "Ringed Seal"
+			};
+
+			var colors = {
+				hunters: '#f57b20',
+				flyers: '#472E74',  
+				gentle: '#815343',
+				swimmers: '#2893ac'
+			}
+
+			$( document ).ready( function() {
+				drawPoll( 'hunters' );
+				drawPoll( 'swimmers' );
+				drawPoll( 'gentle' );
+				drawPoll( 'flyers' );
+			});
+
+			function drawPoll( bracket ) {
+				// Hold the total number of values
+				var total;
+
+				// Hold our poll data
+				var data = {
+					labels: [],
+					datasets: []
+				};
+
+				$.getJSON( 'http://www.alaskawild.org/furry-feud/' + bracket + '.php', function( response ) {
+					var dataset = { 
+						label: 'Votes', 
+						data: [],
+						fillColor: colors[ bracket ],
+						strokeColor: shadeColor( colors[ bracket ], 0.25),
+						highlightFill: shadeColor( colors[ bracket ], 0.25),
+						highlightStroke: shadeColor( colors[ bracket ], 0.25) 
+					};
+
+					$.each( response, function( label, value ) {
+						data.labels.push( animals[ label ] );
+						dataset.data.push( value );
+					});
+					
+					data.datasets.push( dataset );
+
+					var chartCanvas = document.getElementById( bracket + '-poll' ).getContext( "2d" );
+
+					// Draw the chart
+					var newChart = new Chart( chartCanvas ).Bar( data, {
+						//Boolean - Whether grid lines are shown across the chart
+						scaleShowGridLines : false,
+
+						// Boolean - If we should show the scale at all
+						showScale: true
+					});
+
+				});
+			}
+
+			/*
+				Source: 
+				http://stackoverflow.com/questions/5560248/programmatically-lighten-or-darken-a-hex-color-or-rgb-and-blend-colors
+			*/
+			function shadeColor(color, percent) {   
+				var f=parseInt(color.slice(1),16),t=percent<0?0:255,p=percent<0?percent*-1:percent,R=f>>16,G=f>>8&0x00FF,B=f&0x0000FF;
+				return "#"+(0x1000000+(Math.round((t-R)*p)+R)*0x10000+(Math.round((t-G)*p)+G)*0x100+(Math.round((t-B)*p)+B)).toString(16).slice(1);
+			}				
+		</script>
+	{% endif %}
+	<!-- @END thanks.html -->
+{% endblock %}
+
+{% block below_form %}
+	 <script type="text/javascript">
+		  actionkit.forms.contextRoot = '/context/';
+		  actionkit.forms.initTafForm('taf');
+		  actionkit.sharing.initShareTools();
+	 </script>
+{% endblock %}
