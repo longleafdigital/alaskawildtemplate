@@ -492,3 +492,12 @@ Subject: {{ page.title }}
 		  actionkit.sharing.initShareTools();
 	 </script>
 {% endblock %}
+
+<!-- Testing ability to pull info across pages -->
+{% if action.custom_fields.action_learn guardians = 'Yes' %}
+<script>
+$( document ).ready(function() {
+    console.log( "it worked!" );
+});
+</script>
+{% endif %}
