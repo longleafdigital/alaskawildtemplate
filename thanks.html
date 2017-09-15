@@ -494,7 +494,7 @@ Subject: {{ page.title }}
 {% endblock %}
 
 <!-- Testing ability to pull info across pages -->
-{% if action.custom_fields.action_learn guardians = 'Yes' %}
+{% if action.custom_fields.action_learn_guardians = 'Yes' %}
 <script>
 $( document ).ready(function() {
     console.log( "it worked!" );
