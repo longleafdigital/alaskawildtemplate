@@ -1992,6 +1992,18 @@
 	</script>
 {% endif %}
 
+<!-- test block just to address pay_by_paypal issue -->
+<script>
+$("body").click(function() {
+ if ($("#pay_by_paypal").not(':checked')) {
+	console.log("not checked");
+ } else {
+	console.log("checked");
+ }
+}
+</script>
+<!-- END test block  -->
+
 <!-- begin use_vzero block -->
 {% with page.payment_processor_information as pp %}
 {% if pp.use_vzero %}
