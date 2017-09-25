@@ -1950,7 +1950,7 @@
 		function actionkitBeforeSubmit() {	
 			console.log(submit_ticker);
 
-			if(submit_ticker != 1 && $("#pay_by_paypal").not(':checked')) {
+			if(submit_ticker != 1 && !$("#pay_by_paypal").is(':checked')) {
 				var amount_selected = $('input[name="amount"]:checked').val();
 				var amount_other = Number($('input[name="amount_other"]').val());
 				
