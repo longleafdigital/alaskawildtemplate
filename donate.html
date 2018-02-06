@@ -1992,6 +1992,16 @@
 	</script>
 {% endif %}
 
+<!-- script to remove Paypal button when monthly donation is default option -->
+{% if page.custom_fields.monthly_default %}
+<script>
+$( document ).ready(function() {
+    $( '.payment-method .paypal' ).fadeOut( 300 );
+});
+</script>
+{% endif %}
+
+
 <!-- begin use_vzero block -->
 {% with page.payment_processor_information as pp %}
 {% if pp.use_vzero %}
