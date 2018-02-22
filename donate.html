@@ -1870,6 +1870,17 @@
 	*/
 {% endcomment %}
 
+<!-- BEGIN script for instant donate functionality -->
+<script>
+{% if page.is_oneclick %}
+	$( document ).ready(function() {
+		$('.payment-method').hide();
+	});
+	
+{% endif %}
+</script>
+
+
 <!-- BEGIN script for processing fee checkbox -->
 <script>
 	$( document ).ready(function() {
