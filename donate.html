@@ -1105,6 +1105,13 @@
 				{% endif %}
 			</div> <!-- .row -->
 
+			<!-- addition of instant donate functionality -->
+			{% if page.is_oneclick %}
+			<input type="hidden" name="page" value="{{ page.name }}">
+			<input type="submit" class="button alert" value="Continue &raquo;" />
+			{% include "./progress_meter.html" %}
+			{% else %}
+			
 			<div class="row">
 				<div class="user-form medium-12 columns">
 					<div class="user-input box">               
@@ -1515,6 +1522,13 @@
 
 								<div id="unknown_user"></div>
 
+								<!-- addition of instant donate functionality -->
+								{% if page.is_oneclick %}
+								<input type="hidden" name="page" value="{{ page.name }}">
+								<input type="submit" class="button alert" value="Continue &raquo;" />
+								{% include "./progress_meter.html" %}
+								{% else %}
+								
 								<div>
 									<div class="row">
 										<div class="medium-12 columns">
