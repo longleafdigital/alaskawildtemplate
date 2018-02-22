@@ -1,6 +1,10 @@
 {% extends "./wrapper.html" %}{% load actionkit_tags %}{% load smartif %}
 
 {% block content %}
+
+<!-- needed for instant donate functionality -->
+{% load_remember_me %}
+
 <!-- @START donate.html -->
 {% if page.custom_fields.recurring_donation_popup %}
 <div id="recurringModal" class="reveal-modal" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">
